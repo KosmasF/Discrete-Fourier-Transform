@@ -28,6 +28,13 @@ struct FreqData
     float ampitude;
 };
 
+struct DFT_data
+{
+    uint minFreq;
+    uint maxFreq;
+    struct FreqData* data;
+};
+
 struct FreqData MultiplyByFreq(struct Wave wave, uint freq);
 
 struct Wave SinWaveByFreq(uint freq, uint samplesPerSecond, float duration, float phase);
@@ -35,5 +42,7 @@ struct Wave SinWaveByFreq(uint freq, uint samplesPerSecond, float duration, floa
 struct Wave CosWaveByFreq(uint freq, uint samplesPerSecond, float duration, float phase);
 
 void PrintFreqData(struct FreqData freqData);
+
+struct DFT_data DiscreteFourierTranform(struct Wave wave, uint minFreq, uint maxFreq);
 
 #endif

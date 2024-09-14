@@ -1,20 +1,27 @@
 CC = gcc
+CXX = g++
 CFLAGS = -g -Wall -Wextra
 
-SOURCES = $(wildcard *.c)
-OBJECTS = $(patsubst %.c,%.o,$(SOURCES))
+C_SOURCES = $(wildcard *.c)
+CPP_SOURCES = $(wildcard *.cpp)
+C_OBJECTS = $(patsubst %.c,%.o,$(C_SOURCES))
+CPP_OBJECTS =$(patsubst %.cpp,%.o,$(CPP_SOURCES))
 
-LDFLAGS = -L.
-LDLIBS = -lm
+
+LDFLAGS = -L. -L/usr/lib
+LDLIBS = -lm -lraylib -lGL -lpthread -ldl -lrt 
 INC = -I.
 
 EXECUTABLE = main
 
-$(EXECUTABLE) : $(OBJECTS)
-	$(CC) $(CFLAGS) $(LDFLAGS) $(LDLIBS) -o $(EXECUTABLE) $(OBJECTS)
+$(EXECUTABLE) : $(C_OBJECTS) $(CPP_OBJECTS)
+	$(CXX) $(CFLAGS) $(LDFLAGS) $(LDLIBS) -o $(EXECUTABLE) $(C_OBJECTS) $(CPP_OBJECTS)
 
-$(OBJECTS) : %.o : %.c
+$(C_OBJECTS) : %.o : %.c
 	$(CC) $(INC) $(CFLAGS) -c $^ -o $@
+
+$(CPP_OBJECTS) : %.o : %.cpp
+	$(CXX) $(INC) $(CFLAGS) -c $^ -o $@
 
 clean:
 	rm -f *o $(EXECUTABLE)

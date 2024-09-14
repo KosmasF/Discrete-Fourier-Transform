@@ -28,6 +28,9 @@ struct FreqData MultiplyByFreq(struct Wave wave, uint freq)
 
     float phase = atan2f(cosWaveSum, sinWaveSum);
 
+    free(sinWave.data);
+    free(cosWave.data);
+
     return (struct FreqData){freq, phase, (fabsf(sinWaveSum) + fabsf(cosWaveSum)) * 2};
 }
 
@@ -64,4 +67,15 @@ struct Wave CosWaveByFreq(uint freq, uint samplesPerSecond, float duration, floa
 void PrintFreqData(struct FreqData freqData)
 {
     printf("Frequecy: %d , Phase: %f , Ampitude: %f \n", freqData.freq, freqData.phase, freqData.ampitude);
+}
+
+struct DFT_data DiscreteFourierTranform(struct Wave wave, uint minFreq, uint maxFreq)
+{
+    struct FreqData* output = malloc((maxFreq - minFreq )* sizeof(struct FreqData));
+    for(int i = 0; i < maxFreq - minFreq; i++)
+    {
+        output[i] = MultiplyByFreq(wave, i);
+    }
+
+    return (struct DFT_data){minFreq, maxFreq, output};
 }
