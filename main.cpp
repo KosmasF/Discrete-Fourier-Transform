@@ -19,7 +19,7 @@ int main()
     while(!Raylib::WindowShouldClose())
         graph.Draw();
    
-   
+   free(data.data);
 
 
     return 0;
