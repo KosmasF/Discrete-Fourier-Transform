@@ -4,10 +4,8 @@
 #include "SDL2/SDL.h"
 #include <stdio.h>
 #include <stdlib.h>
-
-extern void *__cxa_allocate_exception(size_t thrown_size);
-extern void __cxa_throw (void *thrown_exception, void* *tinfo, void (*dest) (void *) );
-extern void * _ZTIl; // typeinfo of long
+#include "Exceptions.h"
+#include "Map.h"
 
 struct GraphWindow
 {
@@ -36,7 +34,5 @@ void graphDraw(struct Graph* this);
 float graphGetMaxValue(struct Graph* this);
 float graphGetMinValue(struct Graph* this);
 float graphGetAverage(struct Graph* this, int start, int end);
-
-float map(float value, float min, float max, float mapMin, float mapMax);
 
 #endif

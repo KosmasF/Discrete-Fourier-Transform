@@ -2,18 +2,46 @@
 #include "Graph.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include "SDL2/SDL.h"
+#include "Slider.h"
 
-bool WindowShouldClose() {
+struct Graph* graph;
+struct SliderWindow* sliderWindow;
+
+
+bool Loop() {
 	SDL_Event e;
 
 	while( SDL_PollEvent( &e ) != 0 ) {
-		switch (e.type) {
-			case SDL_QUIT:
-				return true;
+        if(e.type == SDL_QUIT)
+        {
+            return false;
+        }
+        else if( e.type == SDL_WINDOWEVENT)
+        {
+            if(e.window.windowID == SDL_GetWindowID(graph->window.window))
+            {
+                if(e.window.event == SDL_WINDOWEVENT_CLOSE)
+                    return false;
+            }
+            else if(sliderWindow != NULL)
+            {
+                if(e.window.windowID == SDL_GetWindowID(sliderWindow->window))
+                {
+                    if(e.window.event == SDL_WINDOWEVENT_CLOSE)
+                    {
+                        SliderWindowClose(sliderWindow);
+                        sliderWindow = NULL;
+                    }
+                    else
+                        SliderWindowHandleEvent(sliderWindow, e.window.event);
+                }
+            }
+
 		}
 	}
 
-	return false;
+    return true;
 }
 
 int main()
@@ -23,23 +51,37 @@ int main()
 
     struct Wave wave = SinWaveByFreq(100, 201 , 1 , 0);
     struct DFT_data data = DiscreteFourierTranform(wave, 80 , 110, 1, false);
-    struct Graph* graph = malloc(sizeof(struct Graph));
+    graph = malloc(sizeof(struct Graph));
+    sliderWindow = malloc(sizeof(struct SliderWindow));
 
     graphSetMaxValues(graph, 1000);   
     graphSetupWindow(graph, "Ampitude Fourier Tranform", 1920 / 2 , 1080 / 2); 
+
+    float test;
+    SliderWindowSetup(sliderWindow, "Sliders", 1, 200);
+    SliderSetup(sliderWindow, 0, 0, 1, "Test", &test);
 
     for(int i = 0; i < data.maxFreq - data.minFreq; i++)
     {
         graphAddValue(graph, data.data[i].ampitude);
     }
 
-    graphDraw(graph);
-    free(data.data);
-    free(graph);
+    while(Loop())
+    {
+        graphDraw(graph);
+        if(sliderWindow != NULL)
+            SliderWindowDraw(sliderWindow);
+    }
 
-    while(!WindowShouldClose());
    
 
+    graphDestroy(graph);
+    graphDestroyWindow(graph);
+    if(sliderWindow != NULL)
+        SliderWindowClose(sliderWindow);
+
+    free(data.data);
+    free(graph);
     SDL_Quit();
     return 0;
 }

@@ -2,6 +2,9 @@
     "files.associations": {
         "chrono": "c",
         "sdl.h": "c",
-        "stdlib.h": "c"
+        "stdlib.h": "c",
+        "ios": "c",
+        "sdl_ttf.h": "c",
+        "map": "c"
     }
 }

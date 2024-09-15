@@ -8,7 +8,7 @@ C_OBJECTS = $(patsubst %.c,%.o,$(C_SOURCES))
 
 
 LDFLAGS = -L. -L/usr/lib 
-LDLIBS = -lm -lSDL2
+LDLIBS = -lm -lSDL2 -lSDL2_ttf
 INC = -I. -I/usr/include/SDL2
 
 EXECUTABLE = main
