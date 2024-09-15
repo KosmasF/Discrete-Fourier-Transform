@@ -7,8 +7,8 @@ struct FreqData MultiplyByFreq(struct Wave wave, uint freq)
 
     uint size = wave.samplesPerSecond * wave.duration;
 
-    float* sinWaveMultiplicationOutput = malloc(size * sizeof(float));
-    float* cosWaveMultiplicationOutput = malloc(size * sizeof(float));
+    double* sinWaveMultiplicationOutput = malloc(size * sizeof(double));
+    double* cosWaveMultiplicationOutput = malloc(size * sizeof(double));
     for(int i = 0; i < size; i++)
     {
         sinWaveMultiplicationOutput[i] = sinWave.data[i] * wave.data[i];
@@ -37,7 +37,7 @@ struct FreqData MultiplyByFreq(struct Wave wave, uint freq)
 struct Wave SinWaveByFreq(uint freq, uint samplesPerSecond, float duration, float phase)
 {
     uint size = samplesPerSecond * duration;
-    float* waveData = malloc(size * sizeof(float));
+    double* waveData = malloc(size * sizeof(double));
 
     const float divider = samplesPerSecond / TAU / freq;
 
@@ -52,7 +52,7 @@ struct Wave SinWaveByFreq(uint freq, uint samplesPerSecond, float duration, floa
 struct Wave CosWaveByFreq(uint freq, uint samplesPerSecond, float duration, float phase)
 {
     uint size = samplesPerSecond * duration;
-    float* waveData = malloc(size * sizeof(float));
+    double* waveData = malloc(size * sizeof(double));
 
     const float divider = samplesPerSecond / TAU / freq;
 
@@ -69,13 +69,18 @@ void PrintFreqData(struct FreqData freqData)
     printf("Frequecy: %d , Phase: %f , Ampitude: %f \n", freqData.freq, freqData.phase, freqData.ampitude);
 }
 
-struct DFT_data DiscreteFourierTranform(struct Wave wave, uint minFreq, uint maxFreq)
+struct DFT_data DiscreteFourierTranform(struct Wave wave, uint minFreq, uint maxFreq, int increment, bool logProgress)
 {
     struct FreqData* output = malloc((maxFreq - minFreq )* sizeof(struct FreqData));
-    for(int i = 0; i < maxFreq - minFreq; i++)
+    if(logProgress)
+        printf("DFT started.\n");
+    for(int i = minFreq; i < maxFreq; i+=increment)
     {
-        output[i] = MultiplyByFreq(wave, i);
+        output[i - minFreq] = MultiplyByFreq(wave, i);
+        if(logProgress && i % (1000 * increment) == 0)
+            printf("Calculated freq: %d , %d remaining.\n", i, maxFreq - i);
     }
-
+    if(logProgress)
+        printf("DFT ended.\n");
     return (struct DFT_data){minFreq, maxFreq, output};
 }

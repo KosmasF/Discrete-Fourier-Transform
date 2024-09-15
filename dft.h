@@ -13,10 +13,16 @@ typedef unsigned int uint;
 #define PI 3.14159
 #define TAU (PI * 2)
 
+#define KHZ 1000
+#define MHZ (KHZ * 1000)
+
+#define MS (1.f / 1000)
+#define US (MS / 1000)
+
 
 struct Wave
 {
-    float* data;
+    double* data;
     uint samplesPerSecond;
     float duration;
 };
@@ -43,6 +49,6 @@ struct Wave CosWaveByFreq(uint freq, uint samplesPerSecond, float duration, floa
 
 void PrintFreqData(struct FreqData freqData);
 
-struct DFT_data DiscreteFourierTranform(struct Wave wave, uint minFreq, uint maxFreq);
+struct DFT_data DiscreteFourierTranform(struct Wave wave, uint minFreq, uint maxFreq, int increment, bool logProgress);
 
 #endif
