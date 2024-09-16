@@ -34,8 +34,53 @@ void SliderWindowClose(struct SliderWindow* sliderWindow)
     free(sliderWindow->sliders);
 }
 
-void SliderWindowHandleEvent(struct SliderWindow* sliderWindow, Uint32 event)
+void SliderWindowHandleEvent(struct SliderWindow* sliderWindow, SDL_Event* event)
 {
+    if(event->type == SDL_MOUSEBUTTONDOWN)
+    {
+        for(int i = 0; i < sliderWindow->numSliders; i++)
+        {
+            if(sqrt(pow(
+                event->button.x - 
+                map(*(sliderWindow->sliders[i].variable),sliderWindow->sliders[i].start, sliderWindow->sliders[i].end, 0 + X_OFFSET, sliderWindow->width - X_OFFSET)
+                , 2) 
+                +
+                pow(event->button.y - ((DEFAULT_SLIDER_HEIGHT* i) + 30), 2)
+                )
+                < BALL_RADIUS
+
+            )
+            {
+                if(event->type == SDL_MOUSEBUTTONDOWN)
+                {
+                    sliderWindow->sliders[i].selected = true;
+                }
+                else if(event->type == SDL_MOUSEBUTTONUP)
+                {
+                    sliderWindow->sliders[i].selected = false;
+                }
+            }
+        }
+    }
+    else if(event->type == SDL_MOUSEBUTTONUP)
+    {
+        for(int i = 0; i < sliderWindow->numSliders; i++)
+        {
+            sliderWindow->sliders[i].selected = false;
+        }
+    }
+    else if(event->type == SDL_MOUSEMOTION)
+    {
+        for(int i = 0; i < sliderWindow->numSliders; i++)
+        {
+            if(sliderWindow->sliders[i].selected)
+            {
+                int pos = min(max(X_OFFSET, event->motion.x), sliderWindow->width - X_OFFSET);
+                struct Slider* currentSlider = &(sliderWindow->sliders[i]);
+                *(currentSlider->variable) = map(pos, X_OFFSET, sliderWindow->width - X_OFFSET, currentSlider->start, currentSlider->end);
+            }
+        }
+    }
 }
 
 void SliderSetup(struct SliderWindow *sliderWindow, int id, float minValue, float maxValue,const char* name, float *variable)
@@ -59,10 +104,14 @@ void SliderWindowDraw(struct SliderWindow* sliderWindow)
         SDL_Surface* text;
         SDL_Color color = { 0x00, 0x00, 0x00 };
 
-        text = TTF_RenderText_Solid( sliderWindow->font, currentSlider->name, color );
+        char* name = malloc(MAX_NAME_LENGTH);
+        snprintf(name, MAX_NAME_LENGTH, "%s: %f", currentSlider->name, *(currentSlider->variable));
+
+        text = TTF_RenderText_Solid( sliderWindow->font, name, color );
         if ( !text ) {
             printf("Failed to render text: %s\n", TTF_GetError());
         }
+        free(name);
 
         SDL_Texture* text_texture;
         text_texture = SDL_CreateTextureFromSurface( renderer, text );

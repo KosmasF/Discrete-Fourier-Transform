@@ -6,11 +6,21 @@
 #include "Exceptions.h"
 #include "Map.h"
 #include "Circle.h"
+#include <math.h>
+#include <stdbool.h>
 
 
 #define DEFAULT_SLIDER_HEIGHT 50
 #define X_OFFSET 5
-#define BALL_RADIUS 5
+#define BALL_RADIUS 7
+#define MAX_NAME_LENGTH 128
+
+static inline int min(const int a, const int b) {
+    return a < b ? a : b;
+}
+static inline int max(const int a, const int b) {
+    return a > b ? a : b;
+}
 
 struct SliderWindow
 {
@@ -28,11 +38,12 @@ struct Slider
     float start;
     float end;
     float* variable;
+    bool selected;
 };
 
 
 void SliderWindowSetup(struct SliderWindow* sliderWindow, const char* name, int numSliders, int width);
-void SliderWindowHandleEvent(struct SliderWindow* sliderWindow, Uint32 event);
+void SliderWindowHandleEvent(struct SliderWindow* sliderWindow, SDL_Event* event);
 void SliderWindowClose(struct SliderWindow* sliderWindow);
 void SliderWindowDraw(struct SliderWindow* sliderWindow);
 

@@ -33,12 +33,32 @@ bool Loop() {
                         SliderWindowClose(sliderWindow);
                         sliderWindow = NULL;
                     }
-                    else
-                        SliderWindowHandleEvent(sliderWindow, e.window.event);
                 }
             }
 
 		}
+        else if(e.type == SDL_MOUSEBUTTONDOWN || e.type == SDL_MOUSEBUTTONUP)
+        {
+            if(e.button.windowID == SDL_GetWindowID(graph->window.window))
+            {
+                ;
+            }
+            else if(e.button.windowID == SDL_GetWindowID(sliderWindow->window))
+            {
+                SliderWindowHandleEvent(sliderWindow, &e);
+            }
+        }
+        else if(e.type == SDL_MOUSEMOTION)
+        {
+            if(e.button.windowID == SDL_GetWindowID(graph->window.window))
+            {
+                ;
+            }
+            else if(e.button.windowID == SDL_GetWindowID(sliderWindow->window))
+            {
+                SliderWindowHandleEvent(sliderWindow, &e);
+            }            
+        }
 	}
 
     return true;

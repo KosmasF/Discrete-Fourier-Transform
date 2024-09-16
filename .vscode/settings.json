@@ -5,6 +5,7 @@
         "stdlib.h": "c",
         "ios": "c",
         "sdl_ttf.h": "c",
-        "map": "c"
+        "map": "c",
+        "any": "c"
     }
 }
