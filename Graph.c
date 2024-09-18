@@ -51,8 +51,8 @@ void graphDraw(struct Graph* this)
 	SDL_SetRenderDrawColor(winRenderer, 0xff, 0x00, 0x00, 0xff);
 	for (int i = 0; i < this->numValues - 1; i++)
 	{
-		float y1 = map(this->data[i], min, max, this->window.windowWidth, 0);
-		float y2 = map(this->data[i + 1], min, max, this->window.windowHeight, 0);
+		int y1 = (int)map(this->data[i], min, max, this->window.windowHeight, 0);
+		int y2 = (int)map(this->data[i + 1], min, max, this->window.windowHeight, 0);
 		SDL_RenderDrawLine(winRenderer, x * i, y1, x * (i+1), y2);
 	}
 

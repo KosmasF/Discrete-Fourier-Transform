@@ -1,6 +1,6 @@
 #include "Slider.h"
 
-void SliderWindowSetup(struct SliderWindow* sliderWindow, const char* name, int numSliders, int width)
+void SliderWindowSetup(struct SliderWindow* sliderWindow, const char* name, int numSliders, int width, int textSize)
 {
     int ret;
 
@@ -17,7 +17,7 @@ void SliderWindowSetup(struct SliderWindow* sliderWindow, const char* name, int 
 
     TTF_Font* font;
 
-    font = TTF_OpenFont("LiberationMono-Regular.ttf", 24);
+    font = TTF_OpenFont("LiberationMono-Regular.ttf", textSize);
     if ( !font ) {
         printf("Failed to load font: %s\n", TTF_GetError());
     }
@@ -32,6 +32,7 @@ void SliderWindowClose(struct SliderWindow* sliderWindow)
 	SDL_DestroyRenderer(SDL_GetRenderer(sliderWindow->window));
 	SDL_DestroyWindow(sliderWindow->window);
     free(sliderWindow->sliders);
+    TTF_CloseFont(sliderWindow->font);
 }
 
 void SliderWindowHandleEvent(struct SliderWindow* sliderWindow, SDL_Event* event)
@@ -113,10 +114,13 @@ void SliderWindowDraw(struct SliderWindow* sliderWindow)
         }
         free(name);
 
+
         SDL_Texture* text_texture;
         text_texture = SDL_CreateTextureFromSurface( renderer, text );
         SDL_Rect dest = { 0, heightBuffer, text->w, text->h };
         SDL_RenderCopy( renderer, text_texture, NULL, &dest );
+        SDL_DestroyTexture(text_texture);
+        SDL_FreeSurface(text);
 
         //Line
         SDL_SetRenderDrawColor(renderer, 0x00, 0x00, 0x00, 0xff);

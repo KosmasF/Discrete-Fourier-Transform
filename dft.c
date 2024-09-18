@@ -30,6 +30,8 @@ struct FreqData MultiplyByFreq(struct Wave wave, uint freq)
 
     free(sinWave.data);
     free(cosWave.data);
+    free(sinWaveMultiplicationOutput);
+    free(cosWaveMultiplicationOutput);
 
     return (struct FreqData){freq, phase, (fabsf(sinWaveSum) + fabsf(cosWaveSum)) * 2};
 }

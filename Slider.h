@@ -42,7 +42,7 @@ struct Slider
 };
 
 
-void SliderWindowSetup(struct SliderWindow* sliderWindow, const char* name, int numSliders, int width);
+void SliderWindowSetup(struct SliderWindow* sliderWindow, const char* name, int numSliders, int width, int textSize);
 void SliderWindowHandleEvent(struct SliderWindow* sliderWindow, SDL_Event* event);
 void SliderWindowClose(struct SliderWindow* sliderWindow);
 void SliderWindowDraw(struct SliderWindow* sliderWindow);

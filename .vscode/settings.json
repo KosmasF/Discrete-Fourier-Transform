@@ -7,5 +7,6 @@
         "sdl_ttf.h": "c",
         "map": "c",
         "any": "c"
-    }
+    },
+    "makefile.configureOnOpen": false
 }
