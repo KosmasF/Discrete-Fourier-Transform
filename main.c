@@ -89,7 +89,6 @@ int main()
     SliderSetup(sliderWindow, 3, 0, 1000, "maxFreq", &maxFreq);
     SliderSetup(sliderWindow, 4, 1, 100, "increment", &increment);
 
-    int i = 0;
     while(Loop())
     {
         struct Wave wave = SinWaveByFreq(testWaveFreq, testWaveSampleRate , 1 , 0);
@@ -97,7 +96,7 @@ int main()
 
         graphDestroy(graph);
         graphSetMaxValues(graph, 1000);   
-        for(int i = 0; i < data.maxFreq - data.minFreq; i++)
+        for(int i = 0; i < (data.maxFreq - data.minFreq) / data.increment; i++)
         {
             graphAddValue(graph, data.data[i].ampitude);
         }
@@ -107,8 +106,6 @@ int main()
             SliderWindowDraw(sliderWindow);
         free(data.data);
         free(wave.data);
-    i++;
-        printf("%d\n",i);
     }
 
    

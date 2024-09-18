@@ -39,6 +39,7 @@ struct DFT_data
     uint minFreq;
     uint maxFreq;
     struct FreqData* data;
+    uint increment;
 };
 
 struct FreqData MultiplyByFreq(struct Wave wave, uint freq);

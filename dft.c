@@ -73,16 +73,18 @@ void PrintFreqData(struct FreqData freqData)
 
 struct DFT_data DiscreteFourierTranform(struct Wave wave, uint minFreq, uint maxFreq, int increment, bool logProgress)
 {
-    struct FreqData* output = malloc((maxFreq - minFreq )* sizeof(struct FreqData));
+    size_t numberOfChecks = ((maxFreq - minFreq ) / increment) + 1;
+    struct FreqData* output = malloc(numberOfChecks * sizeof(struct FreqData));
     if(logProgress)
         printf("DFT started.\n");
     for(int i = minFreq; i < maxFreq; i+=increment)
     {
-        output[i - minFreq] = MultiplyByFreq(wave, i);
+        int idx = (i - minFreq) / increment;
+        output[idx] = MultiplyByFreq(wave, i);
         if(logProgress && i % (1000 * increment) == 0)
             printf("Calculated freq: %d , %d remaining.\n", i, maxFreq - i);
     }
     if(logProgress)
         printf("DFT ended.\n");
-    return (struct DFT_data){minFreq, maxFreq, output};
+    return (struct DFT_data){minFreq, maxFreq, output, increment};
 }
