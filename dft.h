@@ -15,6 +15,7 @@ typedef unsigned int uint;
 
 #define KHZ 1000
 #define MHZ (KHZ * 1000)
+#define GHZ (MHZ * 1000)
 
 #define MS (1.f / 1000)
 #define US (MS / 1000)
@@ -24,7 +25,7 @@ struct Wave
 {
     double* data;
     uint samplesPerSecond;
-    float duration;
+    float duration;//In seconds
 };
 
 struct FreqData

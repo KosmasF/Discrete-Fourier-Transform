@@ -4,10 +4,13 @@
 #include <stdlib.h>
 #include "SDL2/SDL.h"
 #include "Slider.h"
+#include <stdbool.h>
 
 
 struct Graph* graph;
 struct SliderWindow* sliderWindow;
+bool generate = true;
+bool continious = false;
 
 
 bool Loop() {
@@ -60,6 +63,18 @@ bool Loop() {
                 SliderWindowHandleEvent(sliderWindow, &e);
             }            
         }
+        else if(e.type == SDL_KEYDOWN)
+        {
+            if(e.key.keysym.sym == SDLK_g)
+            {
+                generate = true;
+            }
+            else if(e.key.keysym.sym == SDLK_c)
+            {
+                continious = !continious;
+                printf("Running continiously: %s\n", continious ? "true" : "false");
+            }
+        }
 	}
 
     return true;
@@ -71,41 +86,47 @@ int main()
 	ret = SDL_Init( SDL_INIT_EVERYTHING );
 
 
-    float testWaveFreq = 100;
-    float testWaveSampleRate = 201;
-    float minFreq = 80;
-    float maxFreq = 110;
-    float increment = 1;
+    float testWaveFreq = 80 * MHZ;
+    float testWaveSampleRate = 800 * KHZ;
+    float minFreq = 70 * MHZ;
+    float maxFreq = 90 * MHZ;
+    float increment = 100 * KHZ;
     graph = malloc(sizeof(struct Graph));
     sliderWindow = malloc(sizeof(struct SliderWindow));
 
     graphSetMaxValues(graph, 1000);   
     graphSetupWindow(graph, "Ampitude Fourier Tranform", 1920 / 2 , 1080 / 2); 
 
-    SliderWindowSetup(sliderWindow, "Sliders", 5, 500, 24);
-    SliderSetup(sliderWindow, 0, 0, 200, "testWaveFreq", &testWaveFreq);
-    SliderSetup(sliderWindow, 1, 1, 402, "testWaveSampleRate", &testWaveSampleRate);
-    SliderSetup(sliderWindow, 2, 0, 1000, "minFreq", &minFreq);
-    SliderSetup(sliderWindow, 3, 0, 1000, "maxFreq", &maxFreq);
-    SliderSetup(sliderWindow, 4, 1, 100, "increment", &increment);
+    SliderWindowSetup(sliderWindow, "Sliders", 5, 1920, 24);
+    SliderSetup(sliderWindow, 0, 0, testWaveFreq * 2, "testWaveFreq", &testWaveFreq);
+    SliderSetup(sliderWindow, 1, 1, testWaveSampleRate * 2, "testWaveSampleRate", &testWaveSampleRate);
+    SliderSetup(sliderWindow, 2, 0, minFreq * 2, "minFreq", &minFreq);
+    SliderSetup(sliderWindow, 3, 0, maxFreq *2, "maxFreq", &maxFreq);
+    SliderSetup(sliderWindow, 4, 1, increment * 2, "increment", &increment);
 
     while(Loop())
     {
-        struct Wave wave = SinWaveByFreq(testWaveFreq, testWaveSampleRate , 1 , 0);
-        struct DFT_data data = DiscreteFourierTranform(wave, minFreq , maxFreq, increment, false);
-
-        graphDestroy(graph);
-        graphSetMaxValues(graph, 1000);   
-        for(int i = 0; i < (data.maxFreq - data.minFreq) / data.increment; i++)
+        if(generate || continious)
         {
-            graphAddValue(graph, data.data[i].ampitude);
+            struct Wave wave = SinWaveByFreq(testWaveFreq, testWaveSampleRate , 1 , 0);
+            struct DFT_data data = DiscreteFourierTranform(wave, minFreq , maxFreq, increment, true && (!continious));
+
+            graphDestroy(graph);
+            graphSetMaxValues(graph, 1000);   
+            for(int i = 0; i < (data.maxFreq - data.minFreq) / data.increment; i++)
+            {
+                graphAddValue(graph, data.data[i].ampitude);
+            }
+            free(data.data);
+            free(wave.data);
+
+            generate = false;
         }
 
         graphDraw(graph);
         if(sliderWindow != NULL)
             SliderWindowDraw(sliderWindow);
-        free(data.data);
-        free(wave.data);
+
     }
 
    

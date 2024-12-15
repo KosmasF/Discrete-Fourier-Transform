@@ -81,7 +81,7 @@ struct DFT_data DiscreteFourierTranform(struct Wave wave, uint minFreq, uint max
     {
         int idx = (i - minFreq) / increment;
         output[idx] = MultiplyByFreq(wave, i);
-        if(logProgress && i % (1000 * increment) == 0)
+        if(logProgress && (i - minFreq) % (increment) == 0)
             printf("Calculated freq: %d , %d remaining.\n", i, maxFreq - i);
     }
     if(logProgress)

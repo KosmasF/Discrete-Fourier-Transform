@@ -6,7 +6,9 @@
         "ios": "c",
         "sdl_ttf.h": "c",
         "map": "c",
-        "any": "c"
+        "any": "c",
+        "*.tcc": "c",
+        "sdl_keycode.h": "c"
     },
     "makefile.configureOnOpen": false
 }

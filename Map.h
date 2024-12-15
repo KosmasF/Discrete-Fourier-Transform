@@ -1,6 +1,12 @@
 #ifndef MAP_H
 #define MAP_H
 
-float map(float value, float min, float max, float mapMin, float mapMax);
+#ifdef __cplusplus
+extern "C" {
+#endif
+float map(float value, float InputMin, float InputMax, float OutputMin, float OutputMax);
+#ifdef __cplusplus
+}
+#endif
 
 #endif
