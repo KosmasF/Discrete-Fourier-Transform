@@ -5,7 +5,7 @@
 #include <SDL2/SDL_ttf.h>
 #include "Exceptions.h"
 #include "Map.h"
-#include "Circle.h"
+#include "DrawCircle.h"
 #include <math.h>
 #include <stdbool.h>
 
@@ -14,6 +14,10 @@
 #define X_OFFSET 5
 #define BALL_RADIUS 7
 #define MAX_NAME_LENGTH 128
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 static inline int min(const int a, const int b) {
     return a < b ? a : b;
@@ -49,6 +53,8 @@ void SliderWindowDraw(struct SliderWindow* sliderWindow);
 
 void SliderSetup(struct SliderWindow* sliderWindow, int id, float minValue, float maxValue, const char* name, float* variable);
 
-
+#ifdef __cplusplus
+}  
+#endif
 
 #endif
