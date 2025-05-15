@@ -98,11 +98,11 @@ int main()
     graphSetupWindow(graph, "Ampitude Fourier Tranform", 1920 / 2 , 1080 / 2); 
 
     SliderWindowSetup(sliderWindow, "Sliders", 5, 1920, 24);
-    SliderSetup(sliderWindow, 0, 0, testWaveFreq * 2, "testWaveFreq", &testWaveFreq);
-    SliderSetup(sliderWindow, 1, 1, testWaveSampleRate * 2, "testWaveSampleRate", &testWaveSampleRate);
-    SliderSetup(sliderWindow, 2, 0, minFreq * 2, "minFreq", &minFreq);
-    SliderSetup(sliderWindow, 3, 0, maxFreq *2, "maxFreq", &maxFreq);
-    SliderSetup(sliderWindow, 4, 1, increment * 2, "increment", &increment);
+    SliderSetup(sliderWindow, 0, 0, testWaveFreq * 2, "testWaveFreq", 5,  &testWaveFreq);
+    SliderSetup(sliderWindow, 1, 1, testWaveSampleRate * 2, "testWaveSampleRate", 5, &testWaveSampleRate);
+    SliderSetup(sliderWindow, 2, 0, minFreq * 2, "minFreq", 5, &minFreq);
+    SliderSetup(sliderWindow, 3, 0, maxFreq *2, "maxFreq", 5,  &maxFreq);
+    SliderSetup(sliderWindow, 4, 1, increment * 2, "increment", 5,  &increment);
 
     while(Loop())
     {

@@ -9,9 +9,13 @@ void SliderWindowSetup(struct SliderWindow* sliderWindow, const char* name, int 
 	const int ScreenHeight = DM.h;
     const int height = numSliders * DEFAULT_SLIDER_HEIGHT;
 
-	SDL_Window* win = SDL_CreateWindow( name, (ScreenWidth / 2) - (width / 2), (ScreenHeight / 2) - (height / 2), width, height, SDL_WINDOW_SHOWN );
+	SDL_Window* win = SDL_CreateWindow( name, 0, 0, width, height, SDL_WINDOW_SHOWN );
 
 	SDL_Renderer* renderer = SDL_CreateRenderer( win, -1, SDL_RENDERER_ACCELERATED );
+
+    SDL_RenderClear(renderer);
+    SDL_RenderPresent(renderer);
+    SDL_UpdateWindowSurface(win);
 
     TTF_Init();
 
@@ -84,9 +88,9 @@ void SliderWindowHandleEvent(struct SliderWindow* sliderWindow, SDL_Event* event
     }
 }
 
-void SliderSetup(struct SliderWindow *sliderWindow, int id, float minValue, float maxValue,const char* name, float *variable)
+void SliderSetup(struct SliderWindow *sliderWindow, int id, float minValue, float maxValue,const char* name, int decimalPlaces, float *variable)
 {
-    sliderWindow->sliders[id] = (struct Slider){name ,minValue, maxValue, variable};
+    sliderWindow->sliders[id] = (struct Slider){name ,minValue, maxValue, decimalPlaces, variable};
 }
 
 void SliderWindowDraw(struct SliderWindow* sliderWindow)
@@ -106,8 +110,9 @@ void SliderWindowDraw(struct SliderWindow* sliderWindow)
         SDL_Color color = { 0x00, 0x00, 0x00 };
 
         char* name = malloc(MAX_NAME_LENGTH);
-        snprintf(name, MAX_NAME_LENGTH, "%s: %f", currentSlider->name, *(currentSlider->variable));
-
+        char format[10];
+        snprintf(format, sizeof(format), "%%s: %%.%if", currentSlider->decimalPlaces);
+        snprintf(name, MAX_NAME_LENGTH, format, currentSlider->name, *(currentSlider->variable));
         text = TTF_RenderText_Solid( sliderWindow->font, name, color );
         if ( !text ) {
             printf("Failed to render text: %s\n", TTF_GetError());

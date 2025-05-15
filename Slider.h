@@ -15,6 +15,8 @@
 #define BALL_RADIUS 7
 #define MAX_NAME_LENGTH 128
 
+#define NUM_DECIMAL_PLACES 2
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -41,6 +43,7 @@ struct Slider
     const char* name;
     float start;
     float end;
+    int decimalPlaces;
     float* variable;
     bool selected;
 };
@@ -51,7 +54,7 @@ void SliderWindowHandleEvent(struct SliderWindow* sliderWindow, SDL_Event* event
 void SliderWindowClose(struct SliderWindow* sliderWindow);
 void SliderWindowDraw(struct SliderWindow* sliderWindow);
 
-void SliderSetup(struct SliderWindow* sliderWindow, int id, float minValue, float maxValue, const char* name, float* variable);
+void SliderSetup(struct SliderWindow* sliderWindow, int id, float minValue, float maxValue, const char* name, int decimalPlaces, float* variable);
 
 #ifdef __cplusplus
 }  
